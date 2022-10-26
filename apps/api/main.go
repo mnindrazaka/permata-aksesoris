@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 	"permata-aksesoris/apps/api/modules/categories"
+	"permata-aksesoris/apps/api/modules/products"
 
 	"github.com/gorilla/mux"
 	"gorm.io/driver/mysql"
@@ -30,5 +31,13 @@ func main() {
 	categoryHandler := categories.NewHandler(categoryUsecase)
 	categories.NewRouter(categoryHandler, router)
 
-	http.ListenAndServe(":3000", router)
+	productRepository := products.NewRepository(con)
+	productUsecase := products.NewUsecase(productRepository)
+	productHandler := products.NewHandler(productUsecase)
+	products.NewRouter(productHandler, router)
+
+	err = http.ListenAndServe(":3000", router)
+	if err != nil {
+		log.Fatal(err)
+	}
 }

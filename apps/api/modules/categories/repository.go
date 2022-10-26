@@ -18,6 +18,6 @@ func NewRepository(con *gorm.DB) Repository {
 
 func (repo repository) getCategories() ([]Category, error) {
 	var categories []Category
-	result := repo.con.Table("categories").Find(&categories)
+	result := repo.con.Model(Category{}).Find(&categories)
 	return categories, result.Error
 }

@@ -16,6 +16,6 @@ func NewRepository(con *gorm.DB) Repository {
 
 func (repository repository) getProducts() ([]Product, error) {
 	var products []Product
-	result := repository.con.Table("products").Find(&products)
+	result := repository.con.Model(Product{}).Find(&products)
 	return products, result.Error
 }

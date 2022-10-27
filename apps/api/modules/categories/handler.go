@@ -3,6 +3,7 @@ package categories
 import (
 	"encoding/json"
 	"net/http"
+	"permata-aksesoris/apps/api/utils"
 
 	"github.com/gorilla/mux"
 )
@@ -25,25 +26,25 @@ func NewHandler(usecase Usecase) Handler {
 func (handler handler) getCategories(w http.ResponseWriter, r *http.Request) {
 	categories, err := handler.usecase.getCategories()
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		utils.WriteInternalServerErrorResponse(w, err)
 		return
 	}
-	json.NewEncoder(w).Encode(categories)
+	utils.WriteSuccessResponse(w, categories)
 }
 
 func (handler handler) createCategory(w http.ResponseWriter, r *http.Request) {
 	var categoryRequest Category
 	if err := json.NewDecoder(r.Body).Decode(&categoryRequest); err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		utils.WriteBadRequestResponse(w, err)
 		return
 	}
 
 	category, err := handler.usecase.createCategory(categoryRequest)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		utils.WriteInternalServerErrorResponse(w, err)
 		return
 	}
-	json.NewEncoder(w).Encode(category)
+	utils.WriteSuccessResponse(w, category)
 }
 
 func (handler handler) updateCategory(w http.ResponseWriter, r *http.Request) {
@@ -52,16 +53,16 @@ func (handler handler) updateCategory(w http.ResponseWriter, r *http.Request) {
 
 	var categoryRequest Category
 	if err := json.NewDecoder(r.Body).Decode(&categoryRequest); err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		utils.WriteBadRequestResponse(w, err)
 		return
 	}
 
 	category, err := handler.usecase.updateCategory(serial, categoryRequest)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		utils.WriteInternalServerErrorResponse(w, err)
 		return
 	}
-	json.NewEncoder(w).Encode(category)
+	utils.WriteSuccessResponse(w, category)
 }
 
 func (handler handler) deleteCategory(w http.ResponseWriter, r *http.Request) {
@@ -69,9 +70,8 @@ func (handler handler) deleteCategory(w http.ResponseWriter, r *http.Request) {
 	serial := vars["serial"]
 
 	if err := handler.usecase.deleteCategory(serial); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		utils.WriteInternalServerErrorResponse(w, err)
 		return
 	}
-
-	json.NewEncoder(w).Encode("success")
+	utils.WriteSuccessResponse(w, nil)
 }

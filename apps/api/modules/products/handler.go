@@ -1,8 +1,8 @@
 package products
 
 import (
-	"encoding/json"
 	"net/http"
+	"permata-aksesoris/apps/api/utils"
 )
 
 type handler struct {
@@ -20,8 +20,8 @@ func NewHandler(usecase Usecase) Handler {
 func (handler handler) getProducts(w http.ResponseWriter, r *http.Request) {
 	products, err := handler.usecase.getProducts()
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		utils.WriteInternalServerErrorResponse(w, err)
 		return
 	}
-	json.NewEncoder(w).Encode(products)
+	utils.WriteSuccessResponse(w, products)
 }

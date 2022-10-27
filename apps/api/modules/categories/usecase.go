@@ -8,6 +8,7 @@ type Usecase interface {
 	getCategories() ([]Category, error)
 	createCategory(Category) (Category, error)
 	updateCategory(string, Category) (Category, error)
+	deleteCategory(string) error
 }
 
 func NewUsecase(repo Repository) Usecase {
@@ -24,4 +25,8 @@ func (usecase usecase) createCategory(category Category) (Category, error) {
 
 func (usecase usecase) updateCategory(serial string, category Category) (Category, error) {
 	return usecase.repo.updateCategory(serial, category)
+}
+
+func (usecase usecase) deleteCategory(serial string) error {
+	return usecase.repo.deleteCategory(serial)
 }

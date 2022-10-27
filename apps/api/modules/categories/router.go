@@ -6,4 +6,5 @@ func NewRouter(handler Handler, router *mux.Router) {
 	router.HandleFunc("/categories", handler.getCategories).Methods("GET")
 	router.HandleFunc("/categories", handler.createCategory).Methods("POST")
 	router.HandleFunc("/categories/{serial}", handler.updateCategory).Methods("PUT")
+	router.HandleFunc("/categories/{serial}", handler.deleteCategory).Methods("DELETE")
 }

@@ -14,6 +14,7 @@ type Repository interface {
 	getCategories() ([]Category, error)
 	createCategory(Category) (Category, error)
 	updateCategory(string, Category) (Category, error)
+	deleteCategory(string) error
 }
 
 func NewRepository(con *gorm.DB) Repository {
@@ -36,4 +37,9 @@ func (repo repository) updateCategory(serial string, category Category) (Categor
 	category.Serial = serial
 	result := repo.con.Model(&category).Updates(category)
 	return category, result.Error
+}
+
+func (repo repository) deleteCategory(serial string) error {
+	result := repo.con.Model(Category{}).Delete(Category{Serial: serial})
+	return result.Error
 }

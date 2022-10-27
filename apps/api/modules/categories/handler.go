@@ -15,6 +15,7 @@ type Handler interface {
 	getCategories(http.ResponseWriter, *http.Request)
 	createCategory(http.ResponseWriter, *http.Request)
 	updateCategory(http.ResponseWriter, *http.Request)
+	deleteCategory(http.ResponseWriter, *http.Request)
 }
 
 func NewHandler(usecase Usecase) Handler {
@@ -61,4 +62,16 @@ func (handler handler) updateCategory(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	json.NewEncoder(w).Encode(category)
+}
+
+func (handler handler) deleteCategory(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	serial := vars["serial"]
+
+	if err := handler.usecase.deleteCategory(serial); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	json.NewEncoder(w).Encode("success")
 }

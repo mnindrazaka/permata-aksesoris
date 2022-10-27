@@ -6,6 +6,7 @@ type usecase struct {
 
 type Usecase interface {
 	getCategories() ([]Category, error)
+	createCategory(Category) (Category, error)
 }
 
 func NewUsecase(repo Repository) Usecase {
@@ -14,4 +15,8 @@ func NewUsecase(repo Repository) Usecase {
 
 func (usecase usecase) getCategories() ([]Category, error) {
 	return usecase.repo.getCategories()
+}
+
+func (usecase usecase) createCategory(category Category) (Category, error) {
+	return usecase.repo.createCategory(category)
 }

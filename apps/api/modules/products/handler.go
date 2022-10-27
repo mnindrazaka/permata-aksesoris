@@ -20,7 +20,7 @@ func NewHandler(usecase Usecase) Handler {
 func (handler handler) getProducts(w http.ResponseWriter, r *http.Request) {
 	products, err := handler.usecase.getProducts()
 	if err != nil {
-		w.Write([]byte("Failed to get data"))
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	json.NewEncoder(w).Encode(products)

@@ -13,6 +13,7 @@ type repository struct {
 type Repository interface {
 	getCategories() ([]Category, error)
 	createCategory(Category) (Category, error)
+	updateCategory(string, Category) (Category, error)
 }
 
 func NewRepository(con *gorm.DB) Repository {
@@ -28,5 +29,11 @@ func (repo repository) getCategories() ([]Category, error) {
 func (repo repository) createCategory(category Category) (Category, error) {
 	category.Serial = utils.CreateSerial("CAT")
 	result := repo.con.Model(Category{}).Create(category)
+	return category, result.Error
+}
+
+func (repo repository) updateCategory(serial string, category Category) (Category, error) {
+	category.Serial = serial
+	result := repo.con.Model(&category).Updates(category)
 	return category, result.Error
 }

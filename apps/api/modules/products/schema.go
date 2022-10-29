@@ -8,7 +8,7 @@ type Product struct {
 	Slug           string              `json:"slug"`
 	Thumbnail      string              `json:"thumbnail"`
 	Description    string              `json:"description"`
-	CategorySerial string              `json:"-"`
+	CategorySerial string              `json:"categorySerial"`
 	Category       categories.Category `json:"category" gorm:"foreignKey:CategorySerial"`
 	Images         []ProductImages     `json:"images" gorm:"foreignKey:ProductSerial"`
 }

@@ -23,11 +23,15 @@ func NewRepository(con *gorm.DB) Repository {
 
 func (repository repository) getProducts() ([]Product, error) {
 	var products []Product
-	result := repository.con.Model(Product{}).Preload("Images").Joins("Category").Find(&products)
+	result := repository.con.Model(Product{}).Preload("Category").Preload("Images").Find(&products)
 	return products, result.Error
 }
 
 func (repository repository) createProduct(product Product) (Product, error) {
+	for index := range product.Images {
+		product.Images[index].Serial = utils.CreateSerial("IMG")
+	}
+
 	product.Serial = utils.CreateSerial("PRD")
 	result := repository.con.Model(Product{}).Create(product)
 	return product, result.Error
@@ -35,7 +39,7 @@ func (repository repository) createProduct(product Product) (Product, error) {
 
 func (repository repository) updateProduct(serial string, product Product) (Product, error) {
 	product.Serial = serial
-	result := repository.con.Model(&product).Updates(product)
+	result := repository.con.Session(&gorm.Session{FullSaveAssociations: true}).Model(&product).Updates(product)
 	return product, result.Error
 }
 

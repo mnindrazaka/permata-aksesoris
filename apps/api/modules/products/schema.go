@@ -10,11 +10,11 @@ type Product struct {
 	Description    string              `json:"description"`
 	CategorySerial string              `json:"categorySerial"`
 	Category       categories.Category `json:"category" gorm:"foreignKey:CategorySerial"`
-	Images         []ProductImages     `json:"images" gorm:"foreignKey:ProductSerial"`
+	Images         []ProductImage      `json:"images" gorm:"foreignKey:ProductSerial"`
 }
 
-type ProductImages struct {
+type ProductImage struct {
 	Serial        string `json:"serial" gorm:"primaryKey"`
 	Url           string `json:"url"`
-	ProductSerial string `json:"-"`
+	ProductSerial string `json:"productSerial"`
 }

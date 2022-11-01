@@ -18,6 +18,9 @@ type Handler interface {
 	createProduct(http.ResponseWriter, *http.Request)
 	updateProduct(http.ResponseWriter, *http.Request)
 	deleteProduct(http.ResponseWriter, *http.Request)
+
+	createProductImage(http.ResponseWriter, *http.Request)
+	deleteProductImage(http.ResponseWriter, *http.Request)
 }
 
 func NewHandler(usecase Usecase) Handler {
@@ -85,7 +88,34 @@ func (handler handler) deleteProduct(w http.ResponseWriter, r *http.Request) {
 
 	if err := handler.usecase.deleteProduct(serial); err != nil {
 		utils.WriteInternalServerErrorResponse(w, err)
+		return
 	}
 
+	utils.WriteSuccessResponse(w, nil)
+}
+
+func (handler handler) createProductImage(w http.ResponseWriter, r *http.Request) {
+	var productImageRequest ProductImage
+	if err := json.NewDecoder(r.Body).Decode(&productImageRequest); err != nil {
+		utils.WriteBadRequestResponse(w, err)
+		return
+	}
+
+	productImage, err := handler.usecase.createProductImage(productImageRequest)
+	if err != nil {
+		utils.WriteInternalServerErrorResponse(w, err)
+		return
+	}
+
+	utils.WriteSuccessResponse(w, productImage)
+}
+
+func (handler handler) deleteProductImage(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	imageSerial := vars["imageSerial"]
+	if err := handler.usecase.deleteProductImage(imageSerial); err != nil {
+		utils.WriteInternalServerErrorResponse(w, err)
+		return
+	}
 	utils.WriteSuccessResponse(w, nil)
 }

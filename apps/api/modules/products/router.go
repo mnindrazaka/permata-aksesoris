@@ -8,4 +8,7 @@ func NewRouter(handler Handler, router *mux.Router) {
 	router.HandleFunc("/products", handler.createProduct).Methods("POST")
 	router.HandleFunc("/products/{serial}", handler.updateProduct).Methods("PUT")
 	router.HandleFunc("/products/{serial}", handler.deleteProduct).Methods("DELETE")
+
+	router.HandleFunc("/products/{serial}/images", handler.createProductImage).Methods("POST")
+	router.HandleFunc("/products/{productSerial}/images/{imageSerial}", handler.deleteProductImage).Methods("DELETE")
 }

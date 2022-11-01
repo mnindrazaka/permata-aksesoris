@@ -14,6 +14,7 @@ type handler struct {
 
 type Handler interface {
 	getProducts(http.ResponseWriter, *http.Request)
+	getProductDetail(http.ResponseWriter, *http.Request)
 	createProduct(http.ResponseWriter, *http.Request)
 	updateProduct(http.ResponseWriter, *http.Request)
 	deleteProduct(http.ResponseWriter, *http.Request)
@@ -30,6 +31,17 @@ func (handler handler) getProducts(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	utils.WriteSuccessResponse(w, products)
+}
+
+func (handler handler) getProductDetail(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	serial := vars["serial"]
+	product, err := handler.usecase.getProductDetail(serial)
+	if err != nil {
+		utils.WriteBadRequestResponse(w, err)
+		return
+	}
+	utils.WriteSuccessResponse(w, product)
 }
 
 func (handler handler) createProduct(w http.ResponseWriter, r *http.Request) {

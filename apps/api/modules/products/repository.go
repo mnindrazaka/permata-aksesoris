@@ -12,6 +12,7 @@ type repository struct {
 
 type Repository interface {
 	getProducts() ([]Product, error)
+	getProductDetail(string) (Product, error)
 	createProduct(Product) (Product, error)
 	updateProduct(string, Product) (Product, error)
 	deleteProduct(string) error
@@ -25,6 +26,12 @@ func (repository repository) getProducts() ([]Product, error) {
 	var products []Product
 	result := repository.con.Model(Product{}).Preload("Category").Preload("Images").Find(&products)
 	return products, result.Error
+}
+
+func (repository repository) getProductDetail(serial string) (Product, error) {
+	var product Product
+	result := repository.con.Model(Product{}).Preload("Category").Preload("Images").First(&product, Product{Serial: serial})
+	return product, result.Error
 }
 
 func (repository repository) createProduct(product Product) (Product, error) {

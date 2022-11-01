@@ -6,6 +6,7 @@ type usecase struct {
 
 type Usecase interface {
 	getProducts() ([]Product, error)
+	getProductDetail(string) (Product, error)
 	createProduct(Product) (Product, error)
 	updateProduct(string, Product) (Product, error)
 	deleteProduct(string) error
@@ -17,6 +18,10 @@ func NewUsecase(repo Repository) Usecase {
 
 func (usecase usecase) getProducts() ([]Product, error) {
 	return usecase.repo.getProducts()
+}
+
+func (usecase usecase) getProductDetail(serial string) (Product, error) {
+	return usecase.repo.getProductDetail(serial)
 }
 
 func (usecase usecase) createProduct(product Product) (Product, error) {

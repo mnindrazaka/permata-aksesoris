@@ -11,7 +11,7 @@ type Usecase interface {
 	updateProduct(string, Product) (Product, error)
 	deleteProduct(string) error
 
-	createProductImage(ProductImage) (ProductImage, error)
+	createProductImage(string, ProductImage) (ProductImage, error)
 	deleteProductImage(string) error
 }
 
@@ -39,7 +39,8 @@ func (usecase usecase) deleteProduct(serial string) error {
 	return usecase.repo.deleteProduct(serial)
 }
 
-func (usecase usecase) createProductImage(productImage ProductImage) (ProductImage, error) {
+func (usecase usecase) createProductImage(productSerial string, productImage ProductImage) (ProductImage, error) {
+	productImage.ProductSerial = productSerial
 	return usecase.repo.createProductImage(productImage)
 }
 

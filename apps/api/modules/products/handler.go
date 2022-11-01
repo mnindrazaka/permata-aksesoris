@@ -95,13 +95,16 @@ func (handler handler) deleteProduct(w http.ResponseWriter, r *http.Request) {
 }
 
 func (handler handler) createProductImage(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	productSerial := vars["productSerial"]
+
 	var productImageRequest ProductImage
 	if err := json.NewDecoder(r.Body).Decode(&productImageRequest); err != nil {
 		utils.WriteBadRequestResponse(w, err)
 		return
 	}
 
-	productImage, err := handler.usecase.createProductImage(productImageRequest)
+	productImage, err := handler.usecase.createProductImage(productSerial, productImageRequest)
 	if err != nil {
 		utils.WriteInternalServerErrorResponse(w, err)
 		return

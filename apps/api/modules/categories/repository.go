@@ -12,8 +12,8 @@ type repository struct {
 
 type Repository interface {
 	getCategories() ([]Category, error)
-	createCategory(Category) (Category, error)
-	updateCategory(string, Category) (Category, error)
+	createCategory(Category) error
+	updateCategory(string, Category) error
 	deleteCategory(string) error
 }
 
@@ -27,16 +27,16 @@ func (repo repository) getCategories() ([]Category, error) {
 	return categories, result.Error
 }
 
-func (repo repository) createCategory(category Category) (Category, error) {
+func (repo repository) createCategory(category Category) error {
 	category.Serial = utils.CreateSerial("CAT")
 	result := repo.con.Model(Category{}).Create(category)
-	return category, result.Error
+	return result.Error
 }
 
-func (repo repository) updateCategory(serial string, category Category) (Category, error) {
+func (repo repository) updateCategory(serial string, category Category) error {
 	category.Serial = serial
 	result := repo.con.Model(&category).Updates(category)
-	return category, result.Error
+	return result.Error
 }
 
 func (repo repository) deleteCategory(serial string) error {

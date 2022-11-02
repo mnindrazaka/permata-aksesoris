@@ -13,11 +13,11 @@ type repository struct {
 type Repository interface {
 	getProducts() ([]Product, error)
 	getProductDetail(string) (Product, error)
-	createProduct(Product) (Product, error)
-	updateProduct(string, Product) (Product, error)
+	createProduct(Product) error
+	updateProduct(string, Product) error
 	deleteProduct(string) error
 
-	createProductImage(ProductImage) (ProductImage, error)
+	createProductImage(ProductImage) error
 	deleteProductImage(string) error
 }
 
@@ -37,16 +37,16 @@ func (repository repository) getProductDetail(serial string) (Product, error) {
 	return product, result.Error
 }
 
-func (repository repository) createProduct(product Product) (Product, error) {
+func (repository repository) createProduct(product Product) error {
 	product.Serial = utils.CreateSerial("PRD")
 	result := repository.con.Model(Product{}).Create(product)
-	return product, result.Error
+	return result.Error
 }
 
-func (repository repository) updateProduct(serial string, product Product) (Product, error) {
+func (repository repository) updateProduct(serial string, product Product) error {
 	product.Serial = serial
 	result := repository.con.Model(&product).Updates(product)
-	return product, result.Error
+	return result.Error
 }
 
 func (repository repository) deleteProduct(serial string) error {
@@ -54,10 +54,10 @@ func (repository repository) deleteProduct(serial string) error {
 	return result.Error
 }
 
-func (repository repository) createProductImage(productImage ProductImage) (ProductImage, error) {
+func (repository repository) createProductImage(productImage ProductImage) error {
 	productImage.Serial = utils.CreateSerial("IMG")
 	result := repository.con.Model(ProductImage{}).Create(productImage)
-	return productImage, result.Error
+	return result.Error
 }
 
 func (repository repository) deleteProductImage(imageSerial string) error {

@@ -54,13 +54,12 @@ func (handler handler) createProduct(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	product, err := handler.usecase.createProduct(productRequest)
-	if err != nil {
+	if err := handler.usecase.createProduct(productRequest); err != nil {
 		utils.WriteInternalServerErrorResponse(w, err)
 		return
 	}
 
-	utils.WriteSuccessResponse(w, product)
+	utils.WriteSuccessResponse(w, nil)
 }
 
 func (handler handler) updateProduct(w http.ResponseWriter, r *http.Request) {
@@ -73,13 +72,12 @@ func (handler handler) updateProduct(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	product, err := handler.usecase.updateProduct(serial, productRequest)
-	if err != nil {
+	if err := handler.usecase.updateProduct(serial, productRequest); err != nil {
 		utils.WriteInternalServerErrorResponse(w, err)
 		return
 	}
 
-	utils.WriteSuccessResponse(w, product)
+	utils.WriteSuccessResponse(w, nil)
 }
 
 func (handler handler) deleteProduct(w http.ResponseWriter, r *http.Request) {
@@ -104,13 +102,12 @@ func (handler handler) createProductImage(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	productImage, err := handler.usecase.createProductImage(productSerial, productImageRequest)
-	if err != nil {
+	if err := handler.usecase.createProductImage(productSerial, productImageRequest); err != nil {
 		utils.WriteInternalServerErrorResponse(w, err)
 		return
 	}
 
-	utils.WriteSuccessResponse(w, productImage)
+	utils.WriteSuccessResponse(w, nil)
 }
 
 func (handler handler) deleteProductImage(w http.ResponseWriter, r *http.Request) {

@@ -7,11 +7,11 @@ type usecase struct {
 type Usecase interface {
 	getProducts() ([]Product, error)
 	getProductDetail(string) (Product, error)
-	createProduct(Product) (Product, error)
-	updateProduct(string, Product) (Product, error)
+	createProduct(Product) error
+	updateProduct(string, Product) error
 	deleteProduct(string) error
 
-	createProductImage(string, ProductImage) (ProductImage, error)
+	createProductImage(string, ProductImage) error
 	deleteProductImage(string) error
 }
 
@@ -27,11 +27,11 @@ func (usecase usecase) getProductDetail(serial string) (Product, error) {
 	return usecase.repo.getProductDetail(serial)
 }
 
-func (usecase usecase) createProduct(product Product) (Product, error) {
+func (usecase usecase) createProduct(product Product) error {
 	return usecase.repo.createProduct(product)
 }
 
-func (usecase usecase) updateProduct(serial string, product Product) (Product, error) {
+func (usecase usecase) updateProduct(serial string, product Product) error {
 	return usecase.repo.updateProduct(serial, product)
 }
 
@@ -39,7 +39,7 @@ func (usecase usecase) deleteProduct(serial string) error {
 	return usecase.repo.deleteProduct(serial)
 }
 
-func (usecase usecase) createProductImage(productSerial string, productImage ProductImage) (ProductImage, error) {
+func (usecase usecase) createProductImage(productSerial string, productImage ProductImage) error {
 	productImage.ProductSerial = productSerial
 	return usecase.repo.createProductImage(productImage)
 }

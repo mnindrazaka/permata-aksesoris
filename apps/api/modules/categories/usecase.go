@@ -6,8 +6,8 @@ type usecase struct {
 
 type Usecase interface {
 	getCategories() ([]Category, error)
-	createCategory(Category) (Category, error)
-	updateCategory(string, Category) (Category, error)
+	createCategory(Category) error
+	updateCategory(string, Category) error
 	deleteCategory(string) error
 }
 
@@ -19,11 +19,11 @@ func (usecase usecase) getCategories() ([]Category, error) {
 	return usecase.repo.getCategories()
 }
 
-func (usecase usecase) createCategory(category Category) (Category, error) {
+func (usecase usecase) createCategory(category Category) error {
 	return usecase.repo.createCategory(category)
 }
 
-func (usecase usecase) updateCategory(serial string, category Category) (Category, error) {
+func (usecase usecase) updateCategory(serial string, category Category) error {
 	return usecase.repo.updateCategory(serial, category)
 }
 

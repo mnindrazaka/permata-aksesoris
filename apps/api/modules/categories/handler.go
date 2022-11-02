@@ -39,12 +39,11 @@ func (handler handler) createCategory(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	category, err := handler.usecase.createCategory(categoryRequest)
-	if err != nil {
+	if err := handler.usecase.createCategory(categoryRequest); err != nil {
 		utils.WriteInternalServerErrorResponse(w, err)
 		return
 	}
-	utils.WriteSuccessResponse(w, category)
+	utils.WriteSuccessResponse(w, nil)
 }
 
 func (handler handler) updateCategory(w http.ResponseWriter, r *http.Request) {
@@ -57,12 +56,11 @@ func (handler handler) updateCategory(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	category, err := handler.usecase.updateCategory(serial, categoryRequest)
-	if err != nil {
+	if err := handler.usecase.updateCategory(serial, categoryRequest); err != nil {
 		utils.WriteInternalServerErrorResponse(w, err)
 		return
 	}
-	utils.WriteSuccessResponse(w, category)
+	utils.WriteSuccessResponse(w, nil)
 }
 
 func (handler handler) deleteCategory(w http.ResponseWriter, r *http.Request) {

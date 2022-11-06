@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"net/http"
+	"permata-aksesoris/apps/api/middlewares"
 	"permata-aksesoris/apps/api/modules/categories"
 	"permata-aksesoris/apps/api/modules/products"
 
@@ -36,7 +37,9 @@ func main() {
 	productHandler := products.NewHandler(productUsecase)
 	products.NewRouter(productHandler, router)
 
-	err = http.ListenAndServe(":3000", router)
+	routerWithMiddleware := middlewares.NewCors(router)
+
+	err = http.ListenAndServe(":3000", routerWithMiddleware)
 	if err != nil {
 		log.Fatal(err)
 	}

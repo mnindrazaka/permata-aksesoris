@@ -39,3 +39,8 @@ func WriteInternalServerErrorResponse(w http.ResponseWriter, err error) {
 	w.WriteHeader(http.StatusInternalServerError)
 	json.NewEncoder(w).Encode(NewResponse(nil, http.StatusText(http.StatusInternalServerError), err))
 }
+
+func WriteUnauthorizedResponse(w http.ResponseWriter, err error) {
+	w.WriteHeader(http.StatusUnauthorized)
+	json.NewEncoder(w).Encode(NewResponse(nil, http.StatusText(http.StatusUnauthorized), err))
+}

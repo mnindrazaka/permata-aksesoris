@@ -6,6 +6,7 @@ import (
 	"permata-aksesoris/apps/api/middlewares"
 	"permata-aksesoris/apps/api/modules/categories"
 	"permata-aksesoris/apps/api/modules/products"
+	"permata-aksesoris/apps/api/modules/users"
 
 	"github.com/gorilla/mux"
 	"gorm.io/driver/mysql"
@@ -37,9 +38,14 @@ func main() {
 	productHandler := products.NewHandler(productUsecase)
 	products.NewRouter(productHandler, router)
 
-	routerWithMiddleware := middlewares.NewCors(router)
+	userRepository := users.NewRepository(con)
+	userUsecase := users.NewUsecase(userRepository)
+	userHandler := users.NewHandler(userUsecase)
+	users.NewRouter(userHandler, router)
 
-	err = http.ListenAndServe(":3000", routerWithMiddleware)
+	routerWithCors := middlewares.NewCorsMiddleware(router.ServeHTTP)
+
+	err = http.ListenAndServe(":3000", routerWithCors)
 	if err != nil {
 		log.Fatal(err)
 	}

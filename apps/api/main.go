@@ -7,10 +7,9 @@ import (
 	"permata-aksesoris/apps/api/modules/categories"
 	"permata-aksesoris/apps/api/modules/products"
 	"permata-aksesoris/apps/api/modules/users"
+	"permata-aksesoris/apps/api/utils"
 
 	"github.com/gorilla/mux"
-	"gorm.io/driver/mysql"
-	"gorm.io/gorm"
 )
 
 func handleHome(w http.ResponseWriter, r *http.Request) {
@@ -18,9 +17,7 @@ func handleHome(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	dsn := "root:roottoor@tcp(127.0.0.1:3306)/permata_aksesoris?charset=utf8mb4&parseTime=True&loc=Local"
-
-	con, err := gorm.Open(mysql.Open(dsn))
+	con, err := utils.NewDBConnection()
 	if err != nil {
 		log.Fatal(err)
 	}

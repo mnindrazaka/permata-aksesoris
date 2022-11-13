@@ -32,6 +32,16 @@
           }
         ]
       }
+    },
+    "db:seed": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "go run apps/api/databases/seeders/main.go"
+          }
+        ]
+      }
     }
   },
   "tags": []

@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	con, err := databases.NewMainDBConnection()
+	con, err := databases.NewTestDBConnection()
 	if err != nil {
 		log.Fatal(err)
 	}

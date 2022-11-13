@@ -3,11 +3,11 @@ package main
 import (
 	"log"
 	"net/http"
+	"permata-aksesoris/apps/api/databases"
 	"permata-aksesoris/apps/api/middlewares"
 	"permata-aksesoris/apps/api/modules/categories"
 	"permata-aksesoris/apps/api/modules/products"
 	"permata-aksesoris/apps/api/modules/users"
-	"permata-aksesoris/apps/api/utils"
 
 	"github.com/gorilla/mux"
 )
@@ -17,7 +17,7 @@ func handleHome(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	con, err := utils.NewDBConnection()
+	con, err := databases.NewMainDBConnection()
 	if err != nil {
 		log.Fatal(err)
 	}

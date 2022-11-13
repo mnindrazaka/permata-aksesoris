@@ -22,6 +22,16 @@
     },
     "lint": {
       "executor": "@nx-go/nx-go:lint"
+    },
+    "db:migrate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "go run apps/api/databases/migrations/main.go"
+          }
+        ]
+      }
     }
   },
   "tags": []

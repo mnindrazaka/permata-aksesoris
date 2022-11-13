@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http/httptest"
+	"permata-aksesoris/apps/api/databases"
 	"permata-aksesoris/apps/api/utils"
 	"testing"
 
@@ -17,7 +18,7 @@ func TestGetCategories(t *testing.T) {
 	r := httptest.NewRequest("GET", "/categories", nil)
 	w := httptest.NewRecorder()
 
-	con, err := utils.NewDBConnection()
+	con, err := databases.NewTestDBConnection()
 	if err != nil {
 		log.Fatal(err)
 	}

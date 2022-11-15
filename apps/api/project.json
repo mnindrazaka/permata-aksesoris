@@ -28,7 +28,7 @@
       "options": {
         "commands": [
           {
-            "command": "go run apps/api/databases/migrations/main.go"
+            "command": "go run apps/api/scripts/migrate/main.go"
           }
         ]
       }
@@ -38,7 +38,7 @@
       "options": {
         "commands": [
           {
-            "command": "go run apps/api/databases/seeders/main.go"
+            "command": "go run apps/api/scripts/seed/main.go"
           }
         ]
       }

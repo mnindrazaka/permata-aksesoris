@@ -258,3 +258,83 @@ func TestUpdateCategory(t *testing.T) {
 		log.Fatal(err)
 	}
 }
+
+func TestDeleteCategory(t *testing.T) {
+	con, err := databases.NewTestDBConnection()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	if err := databases.Migrate(con); err != nil {
+		log.Fatal(err)
+	}
+
+	if err := databases.Unseed(con); err != nil {
+		log.Fatal(err)
+	}
+
+	if err := databases.Seed(con); err != nil {
+		log.Fatal(err)
+	}
+
+	router := mux.NewRouter().StrictSlash(true)
+	categoryRepository := categories.NewRepository(con)
+	categoryUsecase := categories.NewUsecase(categoryRepository)
+	categoryHandler := categories.NewHandler(categoryUsecase)
+	categories.NewRouter(categoryHandler, router)
+
+	userRepository := users.NewRepository(con)
+	userUsecase := users.NewUsecase(userRepository)
+	userHandler := users.NewHandler(userUsecase)
+	users.NewRouter(userHandler, router)
+
+	reqBody := map[string]interface{}{
+		"email":    "admin@gmail.com",
+		"password": "admin",
+	}
+	body, err := json.Marshal(reqBody)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	r := httptest.NewRequest("POST", "/users/login", bytes.NewReader(body))
+	w := httptest.NewRecorder()
+
+	router.ServeHTTP(w, r)
+
+	data, err := ioutil.ReadAll(w.Result().Body)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	var response ResponseJWT
+	if err := json.Unmarshal(data, &response); err != nil {
+		log.Fatal(err)
+	}
+
+	r = httptest.NewRequest("DELETE", "/categories/"+databases.CategoriesData[0].Serial, nil)
+	r.Header.Set("Authorization", "Bearer "+response.Data["token"])
+	w = httptest.NewRecorder()
+
+	router.ServeHTTP(w, r)
+
+	data, err = ioutil.ReadAll(w.Result().Body)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	var responseCategory utils.Response
+	if err := json.Unmarshal(data, &responseCategory); err != nil {
+		log.Fatal(err)
+	}
+
+	assert.Equal(t, fmt.Sprint(utils.Response{
+		Data:    nil,
+		Status:  http.StatusText(http.StatusOK),
+		Message: http.StatusText(http.StatusOK),
+	}), fmt.Sprint(responseCategory))
+
+	if err := databases.Unseed(con); err != nil {
+		log.Fatal(err)
+	}
+}

@@ -9,8 +9,8 @@ type Product struct {
 	Thumbnail      string              `json:"thumbnail" gorm:"size:250"`
 	Description    string              `json:"description"`
 	CategorySerial string              `json:"categorySerial" gorm:"size:50"`
-	Category       categories.Category `json:"category" gorm:"foreignKey:CategorySerial"`
-	Images         []ProductImage      `json:"images" gorm:"foreignKey:ProductSerial"`
+	Category       categories.Category `json:"category" gorm:"foreignKey:CategorySerial; constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
+	Images         []ProductImage      `json:"images" gorm:"foreignKey:ProductSerial; constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 }
 
 type ProductImage struct {

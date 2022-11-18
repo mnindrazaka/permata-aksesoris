@@ -10,40 +10,21 @@ import (
 	"net/http/httptest"
 	"permata-aksesoris/apps/api/databases"
 	"permata-aksesoris/apps/api/modules/products"
-	"permata-aksesoris/apps/api/modules/users"
 	"permata-aksesoris/apps/api/utils"
 	"testing"
 
-	"github.com/gorilla/mux"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestGetProducts(t *testing.T) {
-	con, err := databases.NewTestDBConnection()
+	con, router, err := BeforeEach()
 	if err != nil {
 		log.Fatal(err)
-	}
-
-	if err := databases.Migrate(con); err != nil {
-		log.Fatal(err)
-	}
-
-	if err := databases.Unseed(con); err != nil {
-		log.Fatal(err)
-	}
-
-	if err := databases.Seed(con); err != nil {
-		log.Fatal(err)
+		return
 	}
 
 	r := httptest.NewRequest("GET", "/products", nil)
 	w := httptest.NewRecorder()
-
-	router := mux.NewRouter().StrictSlash(true)
-	productRepository := products.NewRepository(con)
-	productUsecase := products.NewUsecase(productRepository)
-	productHandler := products.NewHandler(productUsecase)
-	products.NewRouter(productHandler, router)
 	router.ServeHTTP(w, r)
 
 	data, err := ioutil.ReadAll(w.Result().Body)
@@ -73,37 +54,20 @@ func TestGetProducts(t *testing.T) {
 
 	assert.Equal(t, fmt.Sprint(expectedData), fmt.Sprint(response.Data))
 
-	if err := databases.Unseed(con); err != nil {
+	if err := AfterEach(con); err != nil {
 		log.Fatal(err)
 	}
 }
 
 func TestGetProductDetail(t *testing.T) {
-	con, err := databases.NewTestDBConnection()
+	con, router, err := BeforeEach()
 	if err != nil {
 		log.Fatal(err)
-	}
-
-	if err := databases.Migrate(con); err != nil {
-		log.Fatal(err)
-	}
-
-	if err := databases.Unseed(con); err != nil {
-		log.Fatal(err)
-	}
-
-	if err := databases.Seed(con); err != nil {
-		log.Fatal(err)
+		return
 	}
 
 	r := httptest.NewRequest("GET", "/products/"+databases.ProductsData[0].Serial, nil)
 	w := httptest.NewRecorder()
-
-	router := mux.NewRouter().StrictSlash(true)
-	productRepository := products.NewRepository(con)
-	productUsecase := products.NewUsecase(productRepository)
-	productHandler := products.NewHandler(productUsecase)
-	products.NewRouter(productHandler, router)
 	router.ServeHTTP(w, r)
 
 	data, err := ioutil.ReadAll(w.Result().Body)
@@ -133,39 +97,17 @@ func TestGetProductDetail(t *testing.T) {
 
 	assert.Equal(t, fmt.Sprint(expectedData), fmt.Sprint(response.Data))
 
-	if err := databases.Unseed(con); err != nil {
+	if err := AfterEach(con); err != nil {
 		log.Fatal(err)
 	}
 }
 
 func TestCreateProduct(t *testing.T) {
-	con, err := databases.NewTestDBConnection()
+	con, router, err := BeforeEach()
 	if err != nil {
 		log.Fatal(err)
+		return
 	}
-
-	if err := databases.Migrate(con); err != nil {
-		log.Fatal(err)
-	}
-
-	if err := databases.Unseed(con); err != nil {
-		log.Fatal(err)
-	}
-
-	if err := databases.Seed(con); err != nil {
-		log.Fatal(err)
-	}
-
-	router := mux.NewRouter().StrictSlash(true)
-	productRepository := products.NewRepository(con)
-	productUsecase := products.NewUsecase(productRepository)
-	productHandler := products.NewHandler(productUsecase)
-	products.NewRouter(productHandler, router)
-
-	userRepository := users.NewRepository(con)
-	userUsecase := users.NewUsecase(userRepository)
-	userHandler := users.NewHandler(userUsecase)
-	users.NewRouter(userHandler, router)
 
 	reqBody := map[string]interface{}{
 		"email":    "admin@gmail.com",
@@ -225,39 +167,17 @@ func TestCreateProduct(t *testing.T) {
 		Message: http.StatusText(http.StatusOK),
 	}), fmt.Sprint(responseCategory))
 
-	if err := databases.Unseed(con); err != nil {
+	if err := AfterEach(con); err != nil {
 		log.Fatal(err)
 	}
 }
 
 func TestUpdateProduct(t *testing.T) {
-	con, err := databases.NewTestDBConnection()
+	con, router, err := BeforeEach()
 	if err != nil {
 		log.Fatal(err)
+		return
 	}
-
-	if err := databases.Migrate(con); err != nil {
-		log.Fatal(err)
-	}
-
-	if err := databases.Unseed(con); err != nil {
-		log.Fatal(err)
-	}
-
-	if err := databases.Seed(con); err != nil {
-		log.Fatal(err)
-	}
-
-	router := mux.NewRouter().StrictSlash(true)
-	productRepository := products.NewRepository(con)
-	productUsecase := products.NewUsecase(productRepository)
-	productHandler := products.NewHandler(productUsecase)
-	products.NewRouter(productHandler, router)
-
-	userRepository := users.NewRepository(con)
-	userUsecase := users.NewUsecase(userRepository)
-	userHandler := users.NewHandler(userUsecase)
-	users.NewRouter(userHandler, router)
 
 	reqBody := map[string]interface{}{
 		"email":    "admin@gmail.com",
@@ -317,39 +237,17 @@ func TestUpdateProduct(t *testing.T) {
 		Message: http.StatusText(http.StatusOK),
 	}), fmt.Sprint(responseCategory))
 
-	if err := databases.Unseed(con); err != nil {
+	if err := AfterEach(con); err != nil {
 		log.Fatal(err)
 	}
 }
 
 func TestDeleteProduct(t *testing.T) {
-	con, err := databases.NewTestDBConnection()
+	con, router, err := BeforeEach()
 	if err != nil {
 		log.Fatal(err)
+		return
 	}
-
-	if err := databases.Migrate(con); err != nil {
-		log.Fatal(err)
-	}
-
-	if err := databases.Unseed(con); err != nil {
-		log.Fatal(err)
-	}
-
-	if err := databases.Seed(con); err != nil {
-		log.Fatal(err)
-	}
-
-	router := mux.NewRouter().StrictSlash(true)
-	productRepository := products.NewRepository(con)
-	productUsecase := products.NewUsecase(productRepository)
-	productHandler := products.NewHandler(productUsecase)
-	products.NewRouter(productHandler, router)
-
-	userRepository := users.NewRepository(con)
-	userUsecase := users.NewUsecase(userRepository)
-	userHandler := users.NewHandler(userUsecase)
-	users.NewRouter(userHandler, router)
 
 	reqBody := map[string]interface{}{
 		"email":    "admin@gmail.com",
@@ -397,39 +295,17 @@ func TestDeleteProduct(t *testing.T) {
 		Message: http.StatusText(http.StatusOK),
 	}), fmt.Sprint(responseCategory))
 
-	if err := databases.Unseed(con); err != nil {
+	if err := AfterEach(con); err != nil {
 		log.Fatal(err)
 	}
 }
 
 func TestCreateProductImage(t *testing.T) {
-	con, err := databases.NewTestDBConnection()
+	con, router, err := BeforeEach()
 	if err != nil {
 		log.Fatal(err)
+		return
 	}
-
-	if err := databases.Migrate(con); err != nil {
-		log.Fatal(err)
-	}
-
-	if err := databases.Unseed(con); err != nil {
-		log.Fatal(err)
-	}
-
-	if err := databases.Seed(con); err != nil {
-		log.Fatal(err)
-	}
-
-	router := mux.NewRouter().StrictSlash(true)
-	productRepository := products.NewRepository(con)
-	productUsecase := products.NewUsecase(productRepository)
-	productHandler := products.NewHandler(productUsecase)
-	products.NewRouter(productHandler, router)
-
-	userRepository := users.NewRepository(con)
-	userUsecase := users.NewUsecase(userRepository)
-	userHandler := users.NewHandler(userUsecase)
-	users.NewRouter(userHandler, router)
 
 	reqBody := map[string]interface{}{
 		"email":    "admin@gmail.com",
@@ -485,39 +361,17 @@ func TestCreateProductImage(t *testing.T) {
 		Message: http.StatusText(http.StatusOK),
 	}), fmt.Sprint(responseCategory))
 
-	if err := databases.Unseed(con); err != nil {
+	if err := AfterEach(con); err != nil {
 		log.Fatal(err)
 	}
 }
 
 func TestDeleteProductImage(t *testing.T) {
-	con, err := databases.NewTestDBConnection()
+	con, router, err := BeforeEach()
 	if err != nil {
 		log.Fatal(err)
+		return
 	}
-
-	if err := databases.Migrate(con); err != nil {
-		log.Fatal(err)
-	}
-
-	if err := databases.Unseed(con); err != nil {
-		log.Fatal(err)
-	}
-
-	if err := databases.Seed(con); err != nil {
-		log.Fatal(err)
-	}
-
-	router := mux.NewRouter().StrictSlash(true)
-	productRepository := products.NewRepository(con)
-	productUsecase := products.NewUsecase(productRepository)
-	productHandler := products.NewHandler(productUsecase)
-	products.NewRouter(productHandler, router)
-
-	userRepository := users.NewRepository(con)
-	userUsecase := users.NewUsecase(userRepository)
-	userHandler := users.NewHandler(userUsecase)
-	users.NewRouter(userHandler, router)
 
 	reqBody := map[string]interface{}{
 		"email":    "admin@gmail.com",
@@ -565,7 +419,7 @@ func TestDeleteProductImage(t *testing.T) {
 		Message: http.StatusText(http.StatusOK),
 	}), fmt.Sprint(responseCategory))
 
-	if err := databases.Unseed(con); err != nil {
+	if err := AfterEach(con); err != nil {
 		log.Fatal(err)
 	}
 }

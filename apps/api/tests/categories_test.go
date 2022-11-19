@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"permata-aksesoris/apps/api/databases"
+	"permata-aksesoris/apps/api/modules/categories"
 	"permata-aksesoris/apps/api/utils"
 	"testing"
 
@@ -32,12 +33,12 @@ func TestGetCategories(t *testing.T) {
 		log.Fatal(err)
 	}
 
-	var response utils.Response
+	var response utils.Response[[]categories.Category]
 	if err := json.Unmarshal(data, &response); err != nil {
 		log.Fatal(err)
 	}
 
-	var expectedData []map[string]interface{}
+	var expectedData []categories.Category
 	data, err = json.Marshal(databases.CategoriesData)
 	if err != nil {
 		log.Fatal(err)
@@ -87,16 +88,16 @@ func TestCreateCategory(t *testing.T) {
 		log.Fatal(err)
 	}
 
-	var responseCategory utils.Response
-	if err := json.Unmarshal(data, &responseCategory); err != nil {
+	var response utils.Response[interface{}]
+	if err := json.Unmarshal(data, &response); err != nil {
 		log.Fatal(err)
 	}
 
-	assert.Equal(t, fmt.Sprint(utils.Response{
+	assert.Equal(t, fmt.Sprint(utils.Response[interface{}]{
 		Data:    nil,
 		Status:  http.StatusText(http.StatusOK),
 		Message: http.StatusText(http.StatusOK),
-	}), fmt.Sprint(responseCategory))
+	}), fmt.Sprint(response))
 
 	if err := AfterEach(con); err != nil {
 		log.Fatal(err)
@@ -136,12 +137,12 @@ func TestUpdateCategory(t *testing.T) {
 		log.Fatal(err)
 	}
 
-	var responseCategory utils.Response
+	var responseCategory utils.Response[interface{}]
 	if err := json.Unmarshal(data, &responseCategory); err != nil {
 		log.Fatal(err)
 	}
 
-	assert.Equal(t, fmt.Sprint(utils.Response{
+	assert.Equal(t, fmt.Sprint(utils.Response[interface{}]{
 		Data:    nil,
 		Status:  http.StatusText(http.StatusOK),
 		Message: http.StatusText(http.StatusOK),
@@ -175,12 +176,12 @@ func TestDeleteCategory(t *testing.T) {
 		log.Fatal(err)
 	}
 
-	var responseCategory utils.Response
+	var responseCategory utils.Response[interface{}]
 	if err := json.Unmarshal(data, &responseCategory); err != nil {
 		log.Fatal(err)
 	}
 
-	assert.Equal(t, fmt.Sprint(utils.Response{
+	assert.Equal(t, fmt.Sprint(utils.Response[interface{}]{
 		Data:    nil,
 		Status:  http.StatusText(http.StatusOK),
 		Message: http.StatusText(http.StatusOK),

@@ -43,7 +43,7 @@ func (handler handler) createCategory(w http.ResponseWriter, r *http.Request) {
 		utils.WriteInternalServerErrorResponse(w, err)
 		return
 	}
-	utils.WriteSuccessResponse(w, nil)
+	utils.WriteSuccessResponse[interface{}](w, nil)
 }
 
 func (handler handler) updateCategory(w http.ResponseWriter, r *http.Request) {
@@ -60,7 +60,7 @@ func (handler handler) updateCategory(w http.ResponseWriter, r *http.Request) {
 		utils.WriteInternalServerErrorResponse(w, err)
 		return
 	}
-	utils.WriteSuccessResponse(w, nil)
+	utils.WriteSuccessResponse[interface{}](w, nil)
 }
 
 func (handler handler) deleteCategory(w http.ResponseWriter, r *http.Request) {
@@ -71,5 +71,5 @@ func (handler handler) deleteCategory(w http.ResponseWriter, r *http.Request) {
 		utils.WriteInternalServerErrorResponse(w, err)
 		return
 	}
-	utils.WriteSuccessResponse(w, nil)
+	utils.WriteSuccessResponse[interface{}](w, nil)
 }

@@ -8,6 +8,7 @@ import (
 	"net/http/httptest"
 	"permata-aksesoris/apps/api/databases"
 	"permata-aksesoris/apps/api/modules"
+	"permata-aksesoris/apps/api/utils"
 
 	"gorm.io/gorm"
 )
@@ -39,12 +40,6 @@ func AfterEach(con *gorm.DB) error {
 	return databases.Unseed(con)
 }
 
-type ResponseJWT struct {
-	Data    map[string]string `json:"data"`
-	Status  string            `json:"status"`
-	Message string            `json:"message"`
-}
-
 func Authenticate(router http.HandlerFunc) (string, error) {
 	reqBody := map[string]interface{}{
 		"email":    "admin@gmail.com",
@@ -65,7 +60,7 @@ func Authenticate(router http.HandlerFunc) (string, error) {
 		return "", err
 	}
 
-	var response ResponseJWT
+	var response utils.Response[map[string]string]
 	if err := json.Unmarshal(data, &response); err != nil {
 		return "", err
 	}

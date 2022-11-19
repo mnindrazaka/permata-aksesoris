@@ -32,7 +32,7 @@ func TestGetProducts(t *testing.T) {
 		log.Fatal(err)
 	}
 
-	var response utils.Response
+	var response utils.Response[[]products.Product]
 	if err := json.Unmarshal(data, &response); err != nil {
 		log.Fatal(err)
 	}
@@ -42,7 +42,7 @@ func TestGetProducts(t *testing.T) {
 		{Serial: databases.ProductsData[1].Serial, Title: databases.ProductsData[1].Title, Slug: databases.ProductsData[1].Slug, Thumbnail: databases.ProductsData[1].Thumbnail, Description: databases.ProductsData[1].Description, CategorySerial: databases.ProductsData[1].CategorySerial, Category: databases.CategoriesData[1], Images: []products.ProductImage{databases.ProductImagesData[1]}},
 	}
 
-	var expectedData []map[string]interface{}
+	var expectedData []products.Product
 	data, err = json.Marshal(expectedProductsData)
 	if err != nil {
 		log.Fatal(err)
@@ -75,7 +75,7 @@ func TestGetProductDetail(t *testing.T) {
 		log.Fatal(err)
 	}
 
-	var response utils.Response
+	var response utils.Response[products.Product]
 	if err := json.Unmarshal(data, &response); err != nil {
 		log.Fatal(err)
 	}
@@ -85,7 +85,7 @@ func TestGetProductDetail(t *testing.T) {
 		{Serial: databases.ProductsData[1].Serial, Title: databases.ProductsData[1].Title, Slug: databases.ProductsData[1].Slug, Thumbnail: databases.ProductsData[1].Thumbnail, Description: databases.ProductsData[1].Description, CategorySerial: databases.ProductsData[1].CategorySerial, Category: databases.CategoriesData[1], Images: []products.ProductImage{databases.ProductImagesData[1]}},
 	}
 
-	var expectedData map[string]interface{}
+	var expectedData products.Product
 	data, err = json.Marshal(expectedProductsData[0])
 	if err != nil {
 		log.Fatal(err)
@@ -137,12 +137,12 @@ func TestCreateProduct(t *testing.T) {
 		log.Fatal(err)
 	}
 
-	var responseCategory utils.Response
+	var responseCategory utils.Response[interface{}]
 	if err := json.Unmarshal(data, &responseCategory); err != nil {
 		log.Fatal(err)
 	}
 
-	assert.Equal(t, fmt.Sprint(utils.Response{
+	assert.Equal(t, fmt.Sprint(utils.Response[interface{}]{
 		Data:    nil,
 		Status:  http.StatusText(http.StatusOK),
 		Message: http.StatusText(http.StatusOK),
@@ -188,12 +188,12 @@ func TestUpdateProduct(t *testing.T) {
 		log.Fatal(err)
 	}
 
-	var responseCategory utils.Response
+	var responseCategory utils.Response[interface{}]
 	if err := json.Unmarshal(data, &responseCategory); err != nil {
 		log.Fatal(err)
 	}
 
-	assert.Equal(t, fmt.Sprint(utils.Response{
+	assert.Equal(t, fmt.Sprint(utils.Response[interface{}]{
 		Data:    nil,
 		Status:  http.StatusText(http.StatusOK),
 		Message: http.StatusText(http.StatusOK),
@@ -227,12 +227,12 @@ func TestDeleteProduct(t *testing.T) {
 		log.Fatal(err)
 	}
 
-	var responseCategory utils.Response
+	var responseCategory utils.Response[interface{}]
 	if err := json.Unmarshal(data, &responseCategory); err != nil {
 		log.Fatal(err)
 	}
 
-	assert.Equal(t, fmt.Sprint(utils.Response{
+	assert.Equal(t, fmt.Sprint(utils.Response[interface{}]{
 		Data:    nil,
 		Status:  http.StatusText(http.StatusOK),
 		Message: http.StatusText(http.StatusOK),
@@ -274,12 +274,12 @@ func TestCreateProductImage(t *testing.T) {
 		log.Fatal(err)
 	}
 
-	var responseCategory utils.Response
+	var responseCategory utils.Response[interface{}]
 	if err := json.Unmarshal(data, &responseCategory); err != nil {
 		log.Fatal(err)
 	}
 
-	assert.Equal(t, fmt.Sprint(utils.Response{
+	assert.Equal(t, fmt.Sprint(utils.Response[interface{}]{
 		Data:    nil,
 		Status:  http.StatusText(http.StatusOK),
 		Message: http.StatusText(http.StatusOK),
@@ -313,12 +313,12 @@ func TestDeleteProductImage(t *testing.T) {
 		log.Fatal(err)
 	}
 
-	var responseCategory utils.Response
+	var responseCategory utils.Response[interface{}]
 	if err := json.Unmarshal(data, &responseCategory); err != nil {
 		log.Fatal(err)
 	}
 
-	assert.Equal(t, fmt.Sprint(utils.Response{
+	assert.Equal(t, fmt.Sprint(utils.Response[interface{}]{
 		Data:    nil,
 		Status:  http.StatusText(http.StatusOK),
 		Message: http.StatusText(http.StatusOK),

@@ -59,7 +59,7 @@ func (handler handler) createProduct(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	utils.WriteSuccessResponse(w, nil)
+	utils.WriteSuccessResponse[interface{}](w, nil)
 }
 
 func (handler handler) updateProduct(w http.ResponseWriter, r *http.Request) {
@@ -77,7 +77,7 @@ func (handler handler) updateProduct(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	utils.WriteSuccessResponse(w, nil)
+	utils.WriteSuccessResponse[interface{}](w, nil)
 }
 
 func (handler handler) deleteProduct(w http.ResponseWriter, r *http.Request) {
@@ -89,7 +89,7 @@ func (handler handler) deleteProduct(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	utils.WriteSuccessResponse(w, nil)
+	utils.WriteSuccessResponse[interface{}](w, nil)
 }
 
 func (handler handler) createProductImage(w http.ResponseWriter, r *http.Request) {
@@ -107,7 +107,7 @@ func (handler handler) createProductImage(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	utils.WriteSuccessResponse(w, nil)
+	utils.WriteSuccessResponse[interface{}](w, nil)
 }
 
 func (handler handler) deleteProductImage(w http.ResponseWriter, r *http.Request) {
@@ -117,5 +117,5 @@ func (handler handler) deleteProductImage(w http.ResponseWriter, r *http.Request
 		utils.WriteInternalServerErrorResponse(w, err)
 		return
 	}
-	utils.WriteSuccessResponse(w, nil)
+	utils.WriteSuccessResponse[interface{}](w, nil)
 }

@@ -109,49 +109,30 @@ func TestCreateProduct(t *testing.T) {
 		return
 	}
 
-	reqBody := map[string]interface{}{
-		"email":    "admin@gmail.com",
-		"password": "admin",
-	}
-	body, err := json.Marshal(reqBody)
+	token, err := Authenticate(router)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	r := httptest.NewRequest("POST", "/users/login", bytes.NewReader(body))
-	w := httptest.NewRecorder()
-
-	router.ServeHTTP(w, r)
-
-	reqBody = map[string]interface{}{
+	reqBody := map[string]interface{}{
 		"title":          "New Product",
 		"slug":           "new-product",
 		"thumbnail":      "",
 		"description":    "This is a new product",
 		"categorySerial": databases.CategoriesData[0].Serial,
 	}
-	body, err = json.Marshal(reqBody)
+	body, err := json.Marshal(reqBody)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	data, err := ioutil.ReadAll(w.Result().Body)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	var response ResponseJWT
-	if err := json.Unmarshal(data, &response); err != nil {
-		log.Fatal(err)
-	}
-
-	r = httptest.NewRequest("POST", "/products", bytes.NewReader(body))
-	r.Header.Set("Authorization", "Bearer "+response.Data["token"])
-	w = httptest.NewRecorder()
+	r := httptest.NewRequest("POST", "/products", bytes.NewReader(body))
+	r.Header.Set("Authorization", "Bearer "+token)
+	w := httptest.NewRecorder()
 
 	router.ServeHTTP(w, r)
 
-	data, err = ioutil.ReadAll(w.Result().Body)
+	data, err := ioutil.ReadAll(w.Result().Body)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -179,49 +160,30 @@ func TestUpdateProduct(t *testing.T) {
 		return
 	}
 
-	reqBody := map[string]interface{}{
-		"email":    "admin@gmail.com",
-		"password": "admin",
-	}
-	body, err := json.Marshal(reqBody)
+	token, err := Authenticate(router)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	r := httptest.NewRequest("POST", "/users/login", bytes.NewReader(body))
-	w := httptest.NewRecorder()
-
-	router.ServeHTTP(w, r)
-
-	reqBody = map[string]interface{}{
+	reqBody := map[string]interface{}{
 		"title":          "New Product",
 		"slug":           "new-product",
 		"thumbnail":      "",
 		"description":    "This is a new product",
 		"categorySerial": databases.CategoriesData[0].Serial,
 	}
-	body, err = json.Marshal(reqBody)
+	body, err := json.Marshal(reqBody)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	data, err := ioutil.ReadAll(w.Result().Body)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	var response ResponseJWT
-	if err := json.Unmarshal(data, &response); err != nil {
-		log.Fatal(err)
-	}
-
-	r = httptest.NewRequest("PUT", "/products/"+databases.ProductsData[0].Serial, bytes.NewReader(body))
-	r.Header.Set("Authorization", "Bearer "+response.Data["token"])
-	w = httptest.NewRecorder()
+	r := httptest.NewRequest("PUT", "/products/"+databases.ProductsData[0].Serial, bytes.NewReader(body))
+	r.Header.Set("Authorization", "Bearer "+token)
+	w := httptest.NewRecorder()
 
 	router.ServeHTTP(w, r)
 
-	data, err = ioutil.ReadAll(w.Result().Body)
+	data, err := ioutil.ReadAll(w.Result().Body)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -249,37 +211,18 @@ func TestDeleteProduct(t *testing.T) {
 		return
 	}
 
-	reqBody := map[string]interface{}{
-		"email":    "admin@gmail.com",
-		"password": "admin",
-	}
-	body, err := json.Marshal(reqBody)
+	token, err := Authenticate(router)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	r := httptest.NewRequest("POST", "/users/login", bytes.NewReader(body))
+	r := httptest.NewRequest("DELETE", "/products/"+databases.ProductsData[0].Serial, nil)
+	r.Header.Set("Authorization", "Bearer "+token)
 	w := httptest.NewRecorder()
 
 	router.ServeHTTP(w, r)
 
 	data, err := ioutil.ReadAll(w.Result().Body)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	var response ResponseJWT
-	if err := json.Unmarshal(data, &response); err != nil {
-		log.Fatal(err)
-	}
-
-	r = httptest.NewRequest("DELETE", "/products/"+databases.ProductsData[0].Serial, nil)
-	r.Header.Set("Authorization", "Bearer "+response.Data["token"])
-	w = httptest.NewRecorder()
-
-	router.ServeHTTP(w, r)
-
-	data, err = ioutil.ReadAll(w.Result().Body)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -307,45 +250,26 @@ func TestCreateProductImage(t *testing.T) {
 		return
 	}
 
+	token, err := Authenticate(router)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	reqBody := map[string]interface{}{
-		"email":    "admin@gmail.com",
-		"password": "admin",
+		"url": "https://picsum.photos/200/300",
 	}
 	body, err := json.Marshal(reqBody)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	r := httptest.NewRequest("POST", "/users/login", bytes.NewReader(body))
+	r := httptest.NewRequest("POST", "/products/"+databases.ProductsData[0].Serial+"/images", bytes.NewReader(body))
+	r.Header.Set("Authorization", "Bearer "+token)
 	w := httptest.NewRecorder()
 
 	router.ServeHTTP(w, r)
 
-	reqBody = map[string]interface{}{
-		"url": "https://picsum.photos/200/300",
-	}
-	body, err = json.Marshal(reqBody)
-	if err != nil {
-		log.Fatal(err)
-	}
-
 	data, err := ioutil.ReadAll(w.Result().Body)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	var response ResponseJWT
-	if err := json.Unmarshal(data, &response); err != nil {
-		log.Fatal(err)
-	}
-
-	r = httptest.NewRequest("POST", "/products/"+databases.ProductsData[0].Serial+"/images", bytes.NewReader(body))
-	r.Header.Set("Authorization", "Bearer "+response.Data["token"])
-	w = httptest.NewRecorder()
-
-	router.ServeHTTP(w, r)
-
-	data, err = ioutil.ReadAll(w.Result().Body)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -373,37 +297,18 @@ func TestDeleteProductImage(t *testing.T) {
 		return
 	}
 
-	reqBody := map[string]interface{}{
-		"email":    "admin@gmail.com",
-		"password": "admin",
-	}
-	body, err := json.Marshal(reqBody)
+	token, err := Authenticate(router)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	r := httptest.NewRequest("POST", "/users/login", bytes.NewReader(body))
+	r := httptest.NewRequest("DELETE", "/products/"+databases.ProductsData[0].Serial+"/images/"+databases.ProductImagesData[0].Serial, nil)
+	r.Header.Set("Authorization", "Bearer "+token)
 	w := httptest.NewRecorder()
 
 	router.ServeHTTP(w, r)
 
 	data, err := ioutil.ReadAll(w.Result().Body)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	var response ResponseJWT
-	if err := json.Unmarshal(data, &response); err != nil {
-		log.Fatal(err)
-	}
-
-	r = httptest.NewRequest("DELETE", "/products/"+databases.ProductsData[0].Serial+"/images/"+databases.ProductImagesData[0].Serial, nil)
-	r.Header.Set("Authorization", "Bearer "+response.Data["token"])
-	w = httptest.NewRecorder()
-
-	router.ServeHTTP(w, r)
-
-	data, err = ioutil.ReadAll(w.Result().Body)
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -54,12 +54,6 @@ func TestGetCategories(t *testing.T) {
 	}
 }
 
-type ResponseJWT struct {
-	Data    map[string]string `json:"data"`
-	Status  string            `json:"status"`
-	Message string            `json:"message"`
-}
-
 func TestCreateCategory(t *testing.T) {
 	con, router, err := BeforeEach()
 	if err != nil {
@@ -67,47 +61,28 @@ func TestCreateCategory(t *testing.T) {
 		return
 	}
 
+	token, err := Authenticate(router)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	reqBody := map[string]interface{}{
-		"email":    "admin@gmail.com",
-		"password": "admin",
+		"title": "New Category",
+		"slug":  "new-category",
+		"icon":  "",
 	}
 	body, err := json.Marshal(reqBody)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	r := httptest.NewRequest("POST", "/users/login", bytes.NewReader(body))
+	r := httptest.NewRequest("POST", "/categories", bytes.NewReader(body))
+	r.Header.Set("Authorization", "Bearer "+token)
 	w := httptest.NewRecorder()
 
 	router.ServeHTTP(w, r)
 
-	reqBody = map[string]interface{}{
-		"title": "New Category",
-		"slug":  "new-category",
-		"icon":  "",
-	}
-	body, err = json.Marshal(reqBody)
-	if err != nil {
-		log.Fatal(err)
-	}
-
 	data, err := ioutil.ReadAll(w.Result().Body)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	var response ResponseJWT
-	if err := json.Unmarshal(data, &response); err != nil {
-		log.Fatal(err)
-	}
-
-	r = httptest.NewRequest("POST", "/categories", bytes.NewReader(body))
-	r.Header.Set("Authorization", "Bearer "+response.Data["token"])
-	w = httptest.NewRecorder()
-
-	router.ServeHTTP(w, r)
-
-	data, err = ioutil.ReadAll(w.Result().Body)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -135,47 +110,28 @@ func TestUpdateCategory(t *testing.T) {
 		return
 	}
 
+	token, err := Authenticate(router)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	reqBody := map[string]interface{}{
-		"email":    "admin@gmail.com",
-		"password": "admin",
+		"title": "New Category",
+		"slug":  "new-category",
+		"icon":  "",
 	}
 	body, err := json.Marshal(reqBody)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	r := httptest.NewRequest("POST", "/users/login", bytes.NewReader(body))
+	r := httptest.NewRequest("PUT", "/categories/"+databases.CategoriesData[0].Serial, bytes.NewReader(body))
+	r.Header.Set("Authorization", "Bearer "+token)
 	w := httptest.NewRecorder()
 
 	router.ServeHTTP(w, r)
 
-	reqBody = map[string]interface{}{
-		"title": "New Category",
-		"slug":  "new-category",
-		"icon":  "",
-	}
-	body, err = json.Marshal(reqBody)
-	if err != nil {
-		log.Fatal(err)
-	}
-
 	data, err := ioutil.ReadAll(w.Result().Body)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	var response ResponseJWT
-	if err := json.Unmarshal(data, &response); err != nil {
-		log.Fatal(err)
-	}
-
-	r = httptest.NewRequest("PUT", "/categories/"+databases.CategoriesData[0].Serial, bytes.NewReader(body))
-	r.Header.Set("Authorization", "Bearer "+response.Data["token"])
-	w = httptest.NewRecorder()
-
-	router.ServeHTTP(w, r)
-
-	data, err = ioutil.ReadAll(w.Result().Body)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -203,37 +159,18 @@ func TestDeleteCategory(t *testing.T) {
 		return
 	}
 
-	reqBody := map[string]interface{}{
-		"email":    "admin@gmail.com",
-		"password": "admin",
-	}
-	body, err := json.Marshal(reqBody)
+	token, err := Authenticate(router)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	r := httptest.NewRequest("POST", "/users/login", bytes.NewReader(body))
+	r := httptest.NewRequest("DELETE", "/categories/"+databases.CategoriesData[0].Serial, nil)
+	r.Header.Set("Authorization", "Bearer "+token)
 	w := httptest.NewRecorder()
 
 	router.ServeHTTP(w, r)
 
 	data, err := ioutil.ReadAll(w.Result().Body)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	var response ResponseJWT
-	if err := json.Unmarshal(data, &response); err != nil {
-		log.Fatal(err)
-	}
-
-	r = httptest.NewRequest("DELETE", "/categories/"+databases.CategoriesData[0].Serial, nil)
-	r.Header.Set("Authorization", "Bearer "+response.Data["token"])
-	w = httptest.NewRecorder()
-
-	router.ServeHTTP(w, r)
-
-	data, err = ioutil.ReadAll(w.Result().Body)
 	if err != nil {
 		log.Fatal(err)
 	}

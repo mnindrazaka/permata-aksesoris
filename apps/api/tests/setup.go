@@ -1,7 +1,11 @@
 package tests
 
 import (
+	"bytes"
+	"encoding/json"
+	"io/ioutil"
 	"net/http"
+	"net/http/httptest"
 	"permata-aksesoris/apps/api/databases"
 	"permata-aksesoris/apps/api/middlewares"
 	"permata-aksesoris/apps/api/modules/categories"
@@ -54,4 +58,38 @@ func BeforeEach() (*gorm.DB, http.HandlerFunc, error) {
 
 func AfterEach(con *gorm.DB) error {
 	return databases.Unseed(con)
+}
+
+type ResponseJWT struct {
+	Data    map[string]string `json:"data"`
+	Status  string            `json:"status"`
+	Message string            `json:"message"`
+}
+
+func Authenticate(router http.HandlerFunc) (string, error) {
+	reqBody := map[string]interface{}{
+		"email":    "admin@gmail.com",
+		"password": "admin",
+	}
+	body, err := json.Marshal(reqBody)
+	if err != nil {
+		return "", err
+	}
+
+	r := httptest.NewRequest("POST", "/users/login", bytes.NewReader(body))
+	w := httptest.NewRecorder()
+
+	router.ServeHTTP(w, r)
+
+	data, err := ioutil.ReadAll(w.Result().Body)
+	if err != nil {
+		return "", err
+	}
+
+	var response ResponseJWT
+	if err := json.Unmarshal(data, &response); err != nil {
+		return "", err
+	}
+
+	return response.Data["token"], nil
 }

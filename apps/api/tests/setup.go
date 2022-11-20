@@ -10,10 +10,15 @@ import (
 	"permata-aksesoris/apps/api/modules"
 	"permata-aksesoris/apps/api/utils"
 
+	"github.com/joho/godotenv"
 	"gorm.io/gorm"
 )
 
 func BeforeEach() (*gorm.DB, http.HandlerFunc, error) {
+	if err := godotenv.Load("../.env"); err != nil {
+		return nil, nil, err
+	}
+
 	con, err := databases.NewTestDBConnection()
 	if err != nil {
 		return nil, nil, err

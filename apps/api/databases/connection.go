@@ -2,6 +2,8 @@ package databases
 
 import (
 	"fmt"
+	"os"
+	"strconv"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -22,9 +24,26 @@ func NewDBConnection(config Config) (*gorm.DB, error) {
 }
 
 func NewMainDBConnection() (*gorm.DB, error) {
-	return NewDBConnection(Config{databaseName: "permata_aksesoris", host: "127.0.0.1", port: 3306, username: "root", password: "roottoor"})
+	databaseName := os.Getenv("DB_NAME")
+	host := os.Getenv("DB_HOST")
+	username := os.Getenv("DB_USERNAME")
+	password := os.Getenv("DB_PASSWORD")
+	port, err := strconv.Atoi(os.Getenv("DB_PORT"))
+	if err != nil {
+		return nil, err
+	}
+
+	return NewDBConnection(Config{databaseName: databaseName, host: host, port: port, username: username, password: password})
 }
 
 func NewTestDBConnection() (*gorm.DB, error) {
-	return NewDBConnection(Config{databaseName: "permata_aksesoris_test", host: "127.0.0.1", port: 3306, username: "root", password: "roottoor"})
+	databaseName := os.Getenv("DB_TEST_NAME")
+	host := os.Getenv("DB_TEST_HOST")
+	username := os.Getenv("DB_TEST_USERNAME")
+	password := os.Getenv("DB_TEST_PASSWORD")
+	port, err := strconv.Atoi(os.Getenv("DB_TEST_PORT"))
+	if err != nil {
+		return nil, err
+	}
+	return NewDBConnection(Config{databaseName: databaseName, host: host, port: port, username: username, password: password})
 }

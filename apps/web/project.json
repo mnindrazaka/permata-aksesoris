@@ -29,7 +29,8 @@
       "configurations": {
         "development": {
           "buildTarget": "web:build:development",
-          "dev": true
+          "dev": true,
+          "hostname": "0.0.0.0"
         },
         "production": {
           "buildTarget": "web:build:production",

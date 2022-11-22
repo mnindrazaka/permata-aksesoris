@@ -34,7 +34,7 @@ func NewApp(con *gorm.DB) http.HandlerFunc {
 	userHandler := users.NewHandler(userUsecase)
 	users.NewRouter(userHandler, router)
 
-	routerWithCors := middlewares.NewCorsMiddleware(router.ServeHTTP)
+	routerWithMiddlewares := middlewares.NewLoggerMiddleware(middlewares.NewCorsMiddleware(router.ServeHTTP))
 
-	return routerWithCors
+	return routerWithMiddlewares
 }

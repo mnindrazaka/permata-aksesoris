@@ -12,6 +12,7 @@ const nextConfig = {
     // See: https://github.com/gregberge/svgr
     svgr: false,
   },
+  basePath: '/permata-aksesoris',
 };
 
 module.exports = withNx(nextConfig);

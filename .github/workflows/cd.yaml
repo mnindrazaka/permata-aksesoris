@@ -23,7 +23,6 @@ jobs:
             cd /root/Deployments/permata-aksesoris
             git pull origin main
             npm install
-            npm install -g @nrwl/cli
-            nx build web
+            npm run build
             systemctl restart permata-aksesoris-api
             systemctl restart permata-aksesoris-web

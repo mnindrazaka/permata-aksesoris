@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"net/http"
+	"os"
 	"permata-aksesoris/apps/api/databases"
 	"permata-aksesoris/apps/api/modules"
 
@@ -22,7 +23,8 @@ func main() {
 
 	router := modules.NewApp(con)
 
-	err = http.ListenAndServe(":3000", router)
+	port := os.Getenv("PORT")
+	err = http.ListenAndServe(":"+port, router)
 	if err != nil {
 		log.Fatal(err)
 		return

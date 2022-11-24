@@ -12,7 +12,7 @@ import (
 )
 
 func handleHome(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("Welcome to permata aksesoris API"))
+	w.Write([]byte("Welcome to permata aksesoris API !"))
 }
 
 func NewApp(con *gorm.DB) http.HandlerFunc {

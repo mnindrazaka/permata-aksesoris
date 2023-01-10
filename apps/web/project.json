@@ -10,13 +10,20 @@
       "defaultConfiguration": "production",
       "options": {
         "root": "apps/web",
-        "outputPath": "dist/apps/web"
+        "outputPath": "apps/web/dist"
       },
       "configurations": {
         "development": {
           "outputPath": "apps/web"
         },
         "production": {}
+      }
+    },
+    "build:image": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "apps/web",
+        "command": "docker build -t mnindrazaka/permata-aksesoris-web ."
       }
     },
     "serve": {

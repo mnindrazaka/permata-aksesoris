@@ -1,0 +1,41 @@
+services:
+  permata-aksesoris-database:
+    image: mysql
+    container_name: permata-aksesoris-database
+    ports:
+      - 3307:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=permata_aksesoris
+    networks:
+      - permata-aksesoris
+    volumes:
+      - permata-aksesoris:/var/lib/mysql
+      - ./permata_aksesoris.sql:/docker-entrypoint-initdb.d/permata_aksesoris.sql
+    healthcheck:
+      test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost']
+      timeout: 20s
+      retries: 10
+  permata-aksesoris-api:
+    image: mnindrazaka/permata-aksesoris-api
+    container_name: permata-aksesoris-api
+    ports:
+      - 3002:3002
+    depends_on:
+      permata-aksesoris-database:
+        condition: service_healthy
+    networks:
+      - permata-aksesoris
+  permata-aksesoris-web:
+    image: mnindrazaka/permata-aksesoris-web
+    container_name: permata-aksesoris-web
+    ports:
+      - 3001:3001
+    networks:
+      - permata-aksesoris
+networks:
+  permata-aksesoris:
+    name: permata-aksesoris
+volumes:
+  permata-aksesoris:
+    name: permata-aksesoris

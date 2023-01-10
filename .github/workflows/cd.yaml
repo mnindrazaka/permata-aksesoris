@@ -12,6 +12,21 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Docker login
+        env:
+          DOCKER_USER: ${{ secrets.DOCKER_USER }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        run: docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+      - name: Build Image
+        run: |
+          npx nx build web
+          npx nx build:image web
+          npx nx build:linux api
+          npx nx build:image api
+      - name: Push Image
+        run: |
+          docker push ${{ secrets.DOCKER_USER }}/permata-aksesoris-web
+          docker push ${{ secrets.DOCKER_USER }}/permata-aksesoris-api
       - name: Deploy Using ssh
         uses: appleboy/ssh-action@master
         with:
@@ -22,7 +37,4 @@ jobs:
           script: |
             cd /root/Deployments/permata-aksesoris
             git pull origin main
-            npm install
-            npm run build
-            systemctl restart permata-aksesoris-api
-            systemctl restart permata-aksesoris-web
+            docker compose up

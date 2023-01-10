@@ -19,6 +19,7 @@ jobs:
         run: docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
       - name: Build Image
         run: |
+          npm install
           npx nx build web
           npx nx build:image web
           npx nx build:linux api

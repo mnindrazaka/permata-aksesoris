@@ -12,7 +12,20 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Docker login
+      - name: Create .env File for Web
+        run: |
+          touch apps/web/.env
+          echo BASE_PATH=/permata-aksesoris >> apps/web/.env
+      - name: Create .env File for API
+        run: |
+          touch apps/api/.env
+          echo PORT=3002 >> apps/api/.env
+          echo DB_NAME=permata_aksesoris >> apps/api/.env
+          echo DB_HOST=permata-aksesoris-database >> apps/api/.env
+          echo DB_USERNAME=root >> apps/api/.env
+          echo DB_PASSWORD=root >> apps/api/.env
+          echo DB_PORT=3306 >> apps/api/.env
+      - name: Docker Login
         env:
           DOCKER_USER: ${{ secrets.DOCKER_USER }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
@@ -28,7 +41,7 @@ jobs:
         run: |
           docker push ${{ secrets.DOCKER_USER }}/permata-aksesoris-web
           docker push ${{ secrets.DOCKER_USER }}/permata-aksesoris-api
-      - name: Deploy Using ssh
+      - name: Deploy Using SSH
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SSH_HOST }}

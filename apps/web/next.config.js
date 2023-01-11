@@ -13,6 +13,7 @@ const nextConfig = {
     svgr: false,
   },
   basePath: process.env.BASE_PATH ?? '',
+  assetPrefix: process.env.BASE_PATH ?? '',
 };
 
 module.exports = withNx(nextConfig);

@@ -23,7 +23,7 @@
       "executor": "nx:run-commands",
       "options": {
         "cwd": "apps/web",
-        "command": "docker build -t mnindrazaka/permata-aksesoris-web ."
+        "command": "docker build --platform linux/amd64 -t mnindrazaka/permata-aksesoris-web ."
       }
     },
     "serve": {

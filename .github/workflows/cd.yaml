@@ -51,4 +51,5 @@ jobs:
           script: |
             cd /root/Deployments/permata-aksesoris
             docker compose stop
+            docker-compose pull
             docker compose up -d

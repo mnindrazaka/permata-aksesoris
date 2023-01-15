@@ -1,5 +1,6 @@
 services:
   permata-aksesoris-database:
+    platform: linux/amd64
     image: mysql
     container_name: permata-aksesoris-database
     ports:
@@ -17,6 +18,7 @@ services:
       timeout: 20s
       retries: 10
   permata-aksesoris-api:
+    platform: linux/amd64
     image: mnindrazaka/permata-aksesoris-api
     container_name: permata-aksesoris-api
     ports:
@@ -27,6 +29,7 @@ services:
     networks:
       - permata-aksesoris
   permata-aksesoris-web:
+    platform: linux/amd64
     image: mnindrazaka/permata-aksesoris-web
     container_name: permata-aksesoris-web
     ports:

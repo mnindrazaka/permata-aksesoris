@@ -13,7 +13,7 @@ export function Index() {
           <div id="welcome">
             <h1>
               <span> Hello there, </span>
-              Welcome to permata aksesoris web 👋
+              Welcome to permata aksesoris 👋
             </h1>
           </div>
 

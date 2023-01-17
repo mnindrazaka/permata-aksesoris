@@ -22,8 +22,8 @@ jobs:
           echo PORT=3002 >> apps/api/.env
           echo DB_NAME=permata_aksesoris >> apps/api/.env
           echo DB_HOST=permata-aksesoris-database >> apps/api/.env
-          echo DB_USERNAME=root >> apps/api/.env
-          echo DB_PASSWORD=root >> apps/api/.env
+          echo DB_USERNAME=${{ secrets.DB_USERNAME }} >> apps/api/.env
+          echo DB_PASSWORD=${{ secrets.DB_PASSWORD }} >> apps/api/.env
           echo DB_PORT=3306 >> apps/api/.env
       - name: Docker Login
         env:
@@ -39,8 +39,8 @@ jobs:
           npx nx build:image api
       - name: Push Image
         run: |
-          docker push ${{ secrets.DOCKER_USER }}/permata-aksesoris-web
-          docker push ${{ secrets.DOCKER_USER }}/permata-aksesoris-api
+          npx nx push:image web
+          npx nx push:image api
       - name: Deploy Using SSH
         uses: appleboy/ssh-action@master
         with:

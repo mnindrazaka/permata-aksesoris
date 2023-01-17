@@ -25,6 +25,13 @@
         "command": "docker build --platform linux/amd64 -t mnindrazaka/permata-aksesoris-api ."
       }
     },
+    "push:image": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "apps/api",
+        "command": "docker push mnindrazaka/permata-aksesoris-api"
+      }
+    },
     "serve": {
       "executor": "@nx-go/nx-go:serve",
       "options": {

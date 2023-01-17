@@ -26,6 +26,13 @@
         "command": "docker build --platform linux/amd64 -t mnindrazaka/permata-aksesoris-web ."
       }
     },
+    "push:image": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "apps/web",
+        "command": "docker push mnindrazaka/permata-aksesoris-web"
+      }
+    },
     "serve": {
       "executor": "@nrwl/next:server",
       "defaultConfiguration": "development",

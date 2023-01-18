@@ -21,8 +21,23 @@ services:
     platform: linux/amd64
     image: mnindrazaka/permata-aksesoris-api
     container_name: permata-aksesoris-api
+    environment:
+      - PORT=3002
     ports:
       - 3002:3002
+    depends_on:
+      permata-aksesoris-database:
+        condition: service_healthy
+    networks:
+      - permata-aksesoris
+  permata-aksesoris-api-2:
+    platform: linux/amd64
+    image: mnindrazaka/permata-aksesoris-api
+    container_name: permata-aksesoris-api-2
+    environment:
+      - PORT=3003
+    ports:
+      - 3003:3003
     depends_on:
       permata-aksesoris-database:
         condition: service_healthy

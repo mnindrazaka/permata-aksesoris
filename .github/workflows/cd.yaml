@@ -50,7 +50,7 @@ jobs:
           port: 22
           script: |
             cd /root/Deployments/permata-aksesoris
+            git pull origin main
             docker compose stop
-            docker compose rm -f
             docker compose pull
             docker compose up -d
